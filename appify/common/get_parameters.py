@@ -11,9 +11,7 @@ else:
     from inspect import getargspec
 
 
-def get_parameters(func):
-    def f(text: str, text2, text3, text4=4, *args, **kwargs):
-        pass
+# TODO: to be done by the end of the week(20-03-2019) + UT
+def get_parameters_and_defaults(func):
+    params = getargspec(func)
 
-    params = getargspec(f)
-    pass

@@ -14,15 +14,16 @@ class RestructuredParser(DocParser):
     TYPE_INFO = "info_type"
     TYPE_INFO_DESCRIPTION = "param"
     TYPE_INFO_TYPE = "type"
-    REGEX = r"\s*:\s*(?P<info_type>[a-zA-Z0-9-_]+)+\s*(?P<name>[a-zA-Z0-9-_]+):\s*(?P<description>.*)"
+    REGEX = r"\s*:\s*(?P<info_type>[a-zA-Z0-9-_]+)+\s*(?P<name>[a-zA-Z0-9-_]+)\s*:\s*(?P<description>.*)"
 
     def __init__(self):
         self._regex = re.compile(self.REGEX)
 
     def parse(self, docstring):
         """
-
+        Parse the docstring
         :param docstring:
+            docstring to parse
         :return:
         """
         lines = [line for line in docstring.split("\n") if line.strip() != ""]
@@ -39,22 +40,31 @@ class RestructuredParser(DocParser):
             name = match.group(self.NAME)
             text = match.group(self.DESCRIPTION)
             type_info = match.group(self.TYPE_INFO)
-            index, additional_text = self.get_info_text(lines, index, length)
+            index, additional_text = self._get_info_text(lines, index, length)
             text += additional_text
 
             if type_info == self.TYPE_INFO_DESCRIPTION:
-                result[name] = ParameterInfo(name, description=text)
+                if name not in result:
+                    result[name] = ParameterInfo(name)
+                result[name].description = text
 
             if type_info == self.TYPE_INFO_TYPE:
-                result[name] = ParameterInfo(name, type_=text)
+                if name not in result:
+                    result[name] = ParameterInfo(name)
+                result[name].type = text
+
+        return result
 
     @staticmethod
-    def get_info_text(lines, index, length):
+    def _get_info_text(lines, index, length):
         """
         Collect all the lines related to the one defined by the index given
-        :param lines: docstring lines
-        :param index: index of the beginning of the parameter info
-        :param length: length of the docstring
+        :param lines:
+            docstring lines
+        :param index:
+            index of the beginning of the parameter info
+        :param length:
+            length of the docstring
         :return: index of the next unprocessed line, text associated
         """
         initial_indent = count_leading_space(lines[index])

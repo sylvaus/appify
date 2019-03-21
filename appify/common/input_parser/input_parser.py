@@ -66,12 +66,16 @@ class FloatInputParser(InputParser):
 
 class BoolInputParser(InputParser):
     def parse(self, string):
-        try:
-            val = float(string)
-        except ValueError:
-            return False, "Could not convert {0} into float".format(string)
-
-        return True, val
+        string = string.strip().lower()
+        if string == "0":
+            return True, False
+        if string == "false":
+            return True, False
+        if string == "1":
+            return True, True
+        if string == "true":
+            return True, True
+        return False, "Could not convert {0} into bool".format(string)
 
     def get_value_format(self):
         return "bool accepted values: true, false, 0, 1"
