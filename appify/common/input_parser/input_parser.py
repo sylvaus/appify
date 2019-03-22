@@ -2,10 +2,12 @@
 
 """
 
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 
 
-class InputParser(ABC):
+class InputParser(object):
+    __metaclass__ = ABCMeta
+
     @abstractmethod
     def parse(self, string):
         """

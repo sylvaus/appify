@@ -4,6 +4,7 @@ This module provides functions to get the parameters of a function/methods
 from __future__ import print_function
 
 import sys
+from collections import OrderedDict
 
 from appify.common.parameter_info import ParameterInfo
 
@@ -15,13 +16,20 @@ else:
     from itertools import izip_longest
 
 
-# TODO: to be done by the end of the week(20-03-2019) + UT
-def get_parameters_and_defaults(func):
-    result = {}
+def get_parameter_default_annotations(func):
+    result = OrderedDict()
     params = getargspec(func)
 
+    if not params.args:
+        return result
+
+    if params.defaults is None:
+        defaults = []
+    else:
+        defaults = params.defaults
+
     name_defaults = list(izip_longest(
-        reversed(params.args), reversed(params.defaults), fillvalue=None))
+        reversed(params.args), reversed(defaults), fillvalue=None))
     for name, default in reversed(name_defaults):
         result[name] = ParameterInfo(name, default=default)
 

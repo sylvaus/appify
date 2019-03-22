@@ -1,4 +1,5 @@
 import re
+from collections import OrderedDict
 
 from appify.common.doc_parser.doc_parser import DocParser
 from appify.common.parameter_info import ParameterInfo
@@ -28,7 +29,7 @@ class RestructuredParser(DocParser):
         """
         lines = [line for line in docstring.split("\n") if line.strip() != ""]
 
-        result = {}
+        result = OrderedDict()
         length = len(lines)
         index = 0
         while index < length:
