@@ -7,6 +7,15 @@ class ParameterInfo(object):
         self.default = default
         self.description = description
 
+    def __str__(self):
+        string = "Parameter {0}".format(self.name)
+        if self.type:
+            string += " of type {0}".format(self.type)
+        if self.default:
+            string += " with default {0}".format(self.default)
+        if self.description:
+            string += " with description {0}".format(self.description)
+
     def __ne__(self, other):
         return not self.__eq__(other)
 
