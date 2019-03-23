@@ -6,6 +6,7 @@ from __future__ import print_function
 import sys
 from collections import OrderedDict
 
+from appify.common.doc_parser.restructured_parser import RestructuredParser
 from appify.common.parameter_info import ParameterInfo
 
 if sys.version_info[0] > 2:
@@ -39,4 +40,14 @@ def get_parameter_default_annotations(func):
 
     return result
 
+
+def get_parameter_infos(func, doc_parser=RestructuredParser()):
+    func_param_infos = get_parameter_default_annotations(func)
+    doc_param_infos = doc_parser.parse(func.__doc__)
+
+    for name, info in func_param_infos.items():
+        if name in doc_param_infos:
+            func_param_infos[name].update(doc_param_infos[name])
+
+    return func_param_infos
 
