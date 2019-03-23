@@ -1,14 +1,18 @@
 class ParameterInfo(object):
-    __slots__ = ["name", "type", "default", "description"]
+    __slots__ = ["name", "type", "default", "description", "required"]
 
-    def __init__(self, name, type_=None, default=None, description=None):
+    def __init__(self, name, type_=None, default=None, description=None, required=False):
         self.name = name
         self.type = type_
         self.default = default
         self.description = description
+        self.required = required
 
     def __str__(self):
-        string = "Parameter {0}".format(self.name)
+        if self.required:
+            string = "Required parameter {0}".format(self.name)
+        else:
+            string = "Parameter {0}".format(self.name)
         if self.type:
             string += " of type {0}".format(self.type)
         if self.default:
@@ -25,7 +29,8 @@ class ParameterInfo(object):
         return ((self.name != other.name) and
                 (self.type != other.type) and
                 (self.default != other.default) and
-                (self.name != other.description))
+                (self.description != other.description)and
+                (self.required != other.required))
 
     def update(self, other):
         if (self.type is not None) and (other.type is not None) and (self.type != other.type):
@@ -37,6 +42,14 @@ class ParameterInfo(object):
         if (self.description is not None) and (other.description is not None) and (self.name != other.description):
             raise IncompatibleParameter("Parameter {0} has two different description defined: {1} and {2}"
                                         .format(self.name, self.description, other.description))
+
+        if other.type:
+            self.type = other.type
+        if other.description:
+            self.description = other.description
+        if other.default:
+            self.default = other.default
+        self.required = self.required or other.required
 
 
 class IncompatibleParameter(Exception):

@@ -7,14 +7,12 @@ import sys
 from collections import OrderedDict
 
 from appify.common.doc_parser.restructured_parser import RestructuredParser
-from appify.common.parameter_info import ParameterInfo
+from appify.common.parameter_info import ParameterInfo, IncompatibleParameter
 
 if sys.version_info[0] > 2:
     from inspect import getfullargspec as getargspec
-    from itertools import zip_longest as izip_longest
 else:
     from inspect import getargspec
-    from itertools import izip_longest
 
 
 def get_parameter_default_annotations(func):
@@ -29,9 +27,14 @@ def get_parameter_default_annotations(func):
     else:
         defaults = params.defaults
 
-    name_defaults = list(izip_longest(
-        reversed(params.args), reversed(defaults), fillvalue=None))
-    for name, default in reversed(name_defaults):
+    nb_defaults = len(defaults)
+    # Trick to ensure that params.args[:-nb_defaults] returns the full array when
+    # there is no default values
+    if nb_defaults == 0:
+        nb_defaults = -len(params.args)
+    for name in params.args[:-nb_defaults]:
+        result[name] = ParameterInfo(name, required=True)
+    for name, default in zip(params.args[-nb_defaults:], defaults):
         result[name] = ParameterInfo(name, default=default)
 
     if hasattr(params, "annotations") and params.annotations:
@@ -46,8 +49,14 @@ def get_parameter_infos(func, doc_parser=RestructuredParser()):
     doc_param_infos = doc_parser.parse(func.__doc__)
 
     for name, info in func_param_infos.items():
-        if name in doc_param_infos:
+        if name not in doc_param_infos:
+            continue
+        try:
             func_param_infos[name].update(doc_param_infos[name])
+        except IncompatibleParameter as e:
+            raise IncompatibleParameter("Information on parameter {} does not match between "
+                                        "function declaration and docstring.\n{}"
+                                        .format(name, str(e)))
 
     return func_param_infos
 

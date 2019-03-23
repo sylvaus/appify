@@ -14,7 +14,7 @@ class MockDockParser(DocParser):
 
 
 class TestGetParameterInfos(TestCase):
-    def get_parameter_info_no_param(self):
+    def test_get_parameter_info_no_param(self):
         """
         get_parameter_infos should always return an empty dict independently of the
         information provided in the docstring
@@ -24,7 +24,8 @@ class TestGetParameterInfos(TestCase):
         result = get_parameter_infos(func, doc_parser=MockDockParser({}))
         self.assertDictEqual({}, result)
 
-        result = get_parameter_infos(func, doc_parser=MockDockParser({ParameterInfo("a", "str"),
-                                                                      ParameterInfo("bool_flag", default=False)}))
+        result = get_parameter_infos(
+            func, doc_parser=MockDockParser(
+                {"a": ParameterInfo("a", "str"), "bool_flag": ParameterInfo("bool_flag", default=False)}))
         self.assertDictEqual({}, result)
 
