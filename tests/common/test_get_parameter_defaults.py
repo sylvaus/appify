@@ -4,7 +4,7 @@ from unittest import TestCase
 from appify.common.get_parameters import get_parameter_default_annotations
 
 if sys.version_info[0] > 2:
-    from .python3_annotations_tests import TestGetParameterAnnotation
+    from .python3_get_annotations import TestGetParameterAnnotation
 
 
 class TestGetParameterDefault(TestCase):
