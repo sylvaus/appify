@@ -8,8 +8,8 @@ python:
   - "3.6-dev"  # 3.6 development branch
   - "3.7-dev"  # 3.7 development branch
 script:
-  - pytest --cov=appify
+  - nosetests --with-coverage
 install:
-  - pip install codecov pytest pytest-cov
+  - pip install codecov coverage nosetests
 after_success:
   - codecov
