@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from appify.common.get_parameters import get_parameter_default_annotations
+from appify.common.parameter_info import NoDefault
 
 
 class TestGetParameterAnnotation(TestCase):
@@ -33,7 +34,7 @@ class TestGetParameterAnnotation(TestCase):
         self.assertListEqual(["a", "a_b", "T_test_param", "underscore_"],
                              list(parameter_infos.keys()))
         self.assertEqual("a", parameter_infos["a"].name)
-        self.assertEqual(None, parameter_infos["a"].default)
+        self.assertEqual(NoDefault, parameter_infos["a"].default)
         self.assertEqual(None, parameter_infos["a"].type)
         self.assertEqual(True, parameter_infos["a"].required)
         self.assertEqual("a_b", parameter_infos["a_b"].name)
