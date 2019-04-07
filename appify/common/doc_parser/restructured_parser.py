@@ -25,7 +25,7 @@ class RestructuredParser(DocParser):
         Parse the docstring
         :param docstring:
             docstring to parse
-        :return:
+        :return: Dictionary of ParameterInfo with the name as key
         """
         lines = [line for line in docstring.split("\n") if line.strip() != ""]
 

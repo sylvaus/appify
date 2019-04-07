@@ -1,7 +1,14 @@
+from appify.common.parameter_parsing_exception import ParameterParsingException
+
+
+class NoDefault(object):
+    pass
+
+
 class ParameterInfo(object):
     __slots__ = ["name", "type", "default", "description", "required"]
 
-    def __init__(self, name, type_=None, default=None, description=None, required=False):
+    def __init__(self, name, type_=None, default=NoDefault, description=None, required=False):
         self.name = name
         self.type = type_
         self.default = default
@@ -33,10 +40,20 @@ class ParameterInfo(object):
                 (self.required != other.required))
 
     def update(self, other):
+        """
+        Update the parameter info with the given other parameter info
+        :param other:
+            the ParameterInfo to merge into this one
+        :raise: IncompatibleParameter if the two ParameterInfos have incompatible information
+        :return: None
+        """
+        if self.name != other.name:
+            raise IncompatibleParameter("Cannot merge two parameters with different names: {0} and {1}"
+                                        .format(self.name, other.name))
         if (self.type is not None) and (other.type is not None) and (self.type != other.type):
             raise IncompatibleParameter("Parameter {0} has two different type defined: {1} and {2}"
                                         .format(self.name, self.type, other.type))
-        if (self.default is not None) and (other.default is not None) and (self.default != other.default):
+        if (self.default is not NoDefault) and (other.default is not NoDefault) and (self.default != other.default):
             raise IncompatibleParameter("Parameter {0} has two different default value defined: {1} and {2}"
                                         .format(self.name, self.default, other.default))
         if (self.description is not None) and (other.description is not None) and (self.name != other.description):
@@ -52,5 +69,5 @@ class ParameterInfo(object):
         self.required = self.required or other.required
 
 
-class IncompatibleParameter(Exception):
+class IncompatibleParameter(ParameterParsingException):
     pass

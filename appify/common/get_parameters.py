@@ -45,6 +45,14 @@ def get_parameter_default_annotations(func):
 
 
 def get_parameter_infos(func, doc_parser=RestructuredParser()):
+    """
+    Get all the ParameterInfos from the func declaration and docstring
+    :param func:
+        function to get the parameter infos from
+    :param doc_parser:
+        the docstring parser to use (default: RestructuredParser)
+    :return: Dictionary containing the retrieved ParameterInfo, the parameter is used as key
+    """
     func_param_infos = get_parameter_default_annotations(func)
     doc_param_infos = doc_parser.parse(func.__doc__)
 
@@ -59,4 +67,3 @@ def get_parameter_infos(func, doc_parser=RestructuredParser()):
                                         .format(name, str(e)))
 
     return func_param_infos
-
