@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 import appify
 
@@ -8,7 +8,7 @@ with open("readme.md", "r") as fh:
 setup(
     name="appify",
     version=appify.__version__,
-    packages=["appify"],
+    packages=find_packages(),
     url="https://github.com/sylvaus/appify",
     license="MIT",
     author="sylvaus",
