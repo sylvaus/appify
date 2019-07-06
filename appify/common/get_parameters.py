@@ -54,7 +54,7 @@ def get_parameter_infos(func, doc_parser=RestructuredParser()):
     :return: Dictionary containing the retrieved ParameterInfo, the parameter is used as key
     """
     func_param_infos = get_parameter_default_annotations(func)
-    doc_param_infos = doc_parser.parse(func.__doc__)
+    doc_param_infos = doc_parser.parse(func.__doc__) if func.__doc__ else []
 
     for name, info in func_param_infos.items():
         if name not in doc_param_infos:

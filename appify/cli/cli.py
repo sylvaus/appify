@@ -9,7 +9,7 @@ from appify.common.input_parser.input_parser import IntInputParser, StrInputPars
 from appify.common.parameter_info import NoDefault
 from appify.common.parameter_parsing_exception import ParameterParsingException
 
-DEFAULT_DOC_PARSER = RestructuredParser
+DEFAULT_DOC_PARSER = RestructuredParser()
 
 DEFAULT_INPUT_PARSERS = {
     "int": IntInputParser,
@@ -42,7 +42,7 @@ class Clifier(object):
     def __init__(self, func, description=None, version=None, doc_parser=None, input_parsers=None):
         self._func = func
         self._description = description
-        self._version = version
+        self._version = version if version else ""
         self._doc_parser = doc_parser if doc_parser else DEFAULT_DOC_PARSER
         self._input_parsers = input_parsers if input_parsers else copy.deepcopy(DEFAULT_INPUT_PARSERS)
 
@@ -52,7 +52,7 @@ class Clifier(object):
         :return: True if the cli could be created otherwise False
         """
         try:
-            parameter_infos = get_parameter_infos(self._func)
+            parameter_infos = get_parameter_infos(self._func, self._doc_parser)
             arg_parser = self._create_arg_parser(parameter_infos)
         except (ParameterParsingException, InvalidArgument, UnknownTypeArgument) as e:
             print("Could not create a CLI from the function {0}:".format(self._func.__name__))
