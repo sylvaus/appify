@@ -1,0 +1,2 @@
+class ParameterParsingException(Exception):
+    pass

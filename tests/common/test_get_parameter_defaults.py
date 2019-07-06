@@ -71,3 +71,22 @@ class TestGetParameterDefault(TestCase):
         self.assertEqual(123, parameter_infos["underscore_"].default)
         self.assertEqual(False, parameter_infos["underscore_"].required)
 
+    def test_get_parameters_multiple_params_no_default_method(self):
+        class TmpClass:
+            def tmp(self, a, a_b, T_test_param, underscore_):
+                pass
+        inst = TmpClass()
+        func = inst.tmp
+
+        parameter_infos = get_parameter_default_annotations(func)
+        self.assertListEqual(["a", "a_b", "T_test_param", "underscore_"],
+                             list(parameter_infos.keys()))
+        self.assertEqual("a", parameter_infos["a"].name)
+        self.assertEqual(True, parameter_infos["a"].required)
+        self.assertEqual("a_b", parameter_infos["a_b"].name)
+        self.assertEqual(True, parameter_infos["a_b"].required)
+        self.assertEqual("T_test_param", parameter_infos["T_test_param"].name)
+        self.assertEqual(True, parameter_infos["T_test_param"].required)
+        self.assertEqual("underscore_", parameter_infos["underscore_"].name)
+        self.assertEqual(True, parameter_infos["underscore_"].required)
+

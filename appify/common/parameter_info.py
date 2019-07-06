@@ -1,4 +1,4 @@
-from appify.common.parameter_parsing_exception import ParameterParsingException
+from appify.common import ParameterParsingException
 
 
 class NoDefault(object):

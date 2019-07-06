@@ -9,18 +9,29 @@ from collections import OrderedDict
 from appify.common.doc_parser.restructured_parser import RestructuredParser
 from appify.common.parameter_info import ParameterInfo, IncompatibleParameter
 
+from inspect import ismethod
 if sys.version_info[0] > 2:
     from inspect import getfullargspec as getargspec
 else:
     from inspect import getargspec
 
 
-def get_parameter_default_annotations(func):
+def get_parameter_default_annotations(func, keepInstanceRef=False):
+    """
+    Get all the parameter names, default values, and types from the signature
+    :param func: function to extract parameter from
+    :param keepInstanceRef: boolean indication if self, cls should be kept as parameter
+    :return A dictionary with the parameter names as key and a ParameterInfo instance as value
+    :rtype Dict[str, ParameterInfo]
+    """
     result = OrderedDict()
     params = getargspec(func)
 
     if not params.args:
         return result
+
+    if not keepInstanceRef and ismethod(func):
+        params.args.pop(0)
 
     if params.defaults is None:
         defaults = []

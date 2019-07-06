@@ -7,7 +7,7 @@ from appify.common.doc_parser.restructured_parser import RestructuredParser
 from appify.common.get_parameters import get_parameter_infos
 from appify.common.input_parser.input_parser import IntInputParser, StrInputParser, FloatInputParser, BoolInputParser
 from appify.common.parameter_info import NoDefault
-from appify.common.parameter_parsing_exception import ParameterParsingException
+from appify.common import ParameterParsingException
 
 DEFAULT_DOC_PARSER = RestructuredParser()
 
