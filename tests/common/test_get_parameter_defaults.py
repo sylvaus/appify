@@ -1,11 +1,8 @@
 import sys
 from unittest import TestCase
 
-from appify.common.get_parameters import get_parameter_default_annotations
-from appify.common.parameter_info import NoDefault
-
 if sys.version_info[0] > 2:
-    pass
+    from .python3_get_annotations import *
 
 
 class TestGetParameterDefault(TestCase):
