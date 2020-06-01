@@ -3,7 +3,12 @@
 """
 
 from abc import ABCMeta, abstractmethod
-from argparse import ArgumentTypeError
+
+from appify.exceptions import AppifyException
+
+
+class InvalidArgumentFormat(AppifyException):
+    pass
 
 
 class InputParser(object):
@@ -51,7 +56,7 @@ class IntInputParser(InputParser):
         else:
             return val
 
-        raise ArgumentTypeError("Could not convert \"{0}\" into int".format(string))
+        raise InvalidArgumentFormat("Could not convert \"{0}\" into int".format(string))
 
     @property
     def value_format(self):
@@ -67,7 +72,7 @@ class FloatInputParser(InputParser):
         else:
             return val
 
-        raise ArgumentTypeError("Could not convert \"{0}\" into float".format(string))
+        raise InvalidArgumentFormat("Could not convert \"{0}\" into float".format(string))
 
     @property
     def value_format(self):
@@ -85,7 +90,7 @@ class BoolInputParser(InputParser):
             return True
         if string.lower() == "true":
             return True
-        raise ArgumentTypeError("Could not convert \"{0}\" into bool".format(string))
+        raise InvalidArgumentFormat("Could not convert \"{0}\" into bool".format(string))
 
     @property
     def value_format(self):

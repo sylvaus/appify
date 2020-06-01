@@ -2,8 +2,11 @@ from setuptools import setup, find_packages
 
 import appify
 
-with open("readme.md", "r") as fh:
-    long_description = fh.read()
+
+def read(path):
+    with open(path, "r") as fh:
+        return fh.read()
+
 
 setup(
     name="appify",
@@ -14,7 +17,7 @@ setup(
     author="sylvaus",
     author_email="",
     description="Helpers to transform functions into CLI or simple UIs",
-    long_description=long_description,
+    long_description=read("readme.md"),
     long_description_content_type="text/markdown",
     classifiers=[
         "Programming Language :: Python :: 2",

@@ -1,0 +1,2 @@
+class AppifyException(Exception):
+    pass
