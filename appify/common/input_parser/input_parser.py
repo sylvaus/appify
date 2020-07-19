@@ -52,11 +52,9 @@ class IntInputParser(InputParser):
         try:
             val = int(string, int_format)
         except ValueError:
-            pass  # Avoid Exception chaining
-        else:
-            return val
+            raise InvalidArgumentFormat("Could not convert \"{0}\" into int".format(string))
 
-        raise InvalidArgumentFormat("Could not convert \"{0}\" into int".format(string))
+        return val
 
     @property
     def value_format(self):
