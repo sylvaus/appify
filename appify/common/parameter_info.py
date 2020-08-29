@@ -116,7 +116,7 @@ class ParameterInfo(object):
         )
 
     @staticmethod
-    def _has_compatible_description(description, other_description) -> bool:
+    def _has_compatible_description(description, other_description):
         return (
             (description is None)
             or (other_description is None)

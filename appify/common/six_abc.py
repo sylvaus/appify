@@ -4,8 +4,10 @@ Hack to have a uniform way of defining Abstract Base Classes
 
 import sys
 
+
 if sys.version_info >= (3, 4):
-    pass
+    # noinspection PyUnresolvedReferences
+    from abc import ABC
 else:
     from abc import ABCMeta
 
