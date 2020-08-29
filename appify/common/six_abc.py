@@ -2,10 +2,11 @@
 Hack to have a uniform way of defining Abstract Base Classes
 """
 
-import abc
 import sys
 
 if sys.version_info >= (3, 4):
-    ABC = abc.ABC
+    pass
 else:
-    ABC = abc.ABCMeta("ABC", (), {})
+    from abc import ABCMeta
+
+    ABC = ABCMeta("ABC", (), {})

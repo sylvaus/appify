@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Any
 
-from appify.common.abc import ABC
+from appify.common.six_abc import ABC
 from appify.exceptions import AppifyException
 
 

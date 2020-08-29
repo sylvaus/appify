@@ -4,7 +4,7 @@ get the type and description of the parameters
 """
 from abc import abstractmethod
 
-from appify.common.abc import ABC
+from appify.common.six_abc import ABC
 
 
 class DocParser(ABC):
