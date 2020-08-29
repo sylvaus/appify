@@ -6,13 +6,13 @@ from setuptools import setup, find_packages
 
 def read(rel_path):
     here = os.path.abspath(os.path.dirname(__file__))
-    with codecs.open(os.path.join(here, rel_path), 'r') as fp:
+    with codecs.open(os.path.join(here, rel_path), "r") as fp:
         return fp.read()
 
 
 def get_version(rel_path):
     for line in read(rel_path).splitlines():
-        if line.startswith('__version__'):
+        if line.startswith("__version__"):
             delim = '"' if '"' in line else "'"
             return line.split(delim)[1]
     else:
@@ -31,7 +31,12 @@ setup(
     long_description=read("readme.md"),
     long_description_content_type="text/markdown",
     extras_require={
-        "test": ["pytest>=5.4.2", "pytest-cov>=2.9.0", "tox>=3.15.1"],
+        "dev": [
+            "pre-commit>=2.7.1",
+            "pytest>=5.4.2",
+            "pytest-cov>=2.9.0",
+            "tox>=3.15.1",
+        ],
     },
     classifiers=[
         "Programming Language :: Python :: 2",
