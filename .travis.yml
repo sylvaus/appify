@@ -10,6 +10,6 @@ python:
 script:
   - pytest --cov --cov-append
 install:
-  - pip install codecov pytest pytest-cov<=2.9.0
+  - pip install codecov pytest "pytest-cov<=2.9.0"
 after_success:
   - codecov
