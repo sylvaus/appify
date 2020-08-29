@@ -3,7 +3,12 @@ from __future__ import print_function
 import copy
 from argparse import ArgumentParser, ArgumentTypeError
 
-from appify.cli.inputs import IntInputParser, StrInputParser, FloatInputParser, BoolInputParser
+from appify.cli.inputs import (
+    IntInputParser,
+    StrInputParser,
+    FloatInputParser,
+    BoolInputParser,
+)
 from appify.common.checks import check_parameter_info
 from appify.common.doc_parser.restructured_parser import RestructuredParser
 from appify.common.exceptions import InvalidArgument
@@ -20,12 +25,16 @@ DEFAULT_INPUT_PARSERS = {
 
 
 class Clifier(object):
-    def __init__(self, func, description=None, version=None, doc_parser=None, input_parsers=None):
+    def __init__(
+        self, func, description=None, version=None, doc_parser=None, input_parsers=None
+    ):
         self._func = func
         description = description
         version = version if version else ""
         doc_parser = doc_parser if doc_parser else DEFAULT_DOC_PARSER
-        input_parsers = input_parsers if input_parsers else copy.deepcopy(DEFAULT_INPUT_PARSERS)
+        input_parsers = (
+            input_parsers if input_parsers else copy.deepcopy(DEFAULT_INPUT_PARSERS)
+        )
         self._parameter_infos = get_parameter_infos(func, doc_parser)
         self._arg_parser = self._create_arg_parser(description, version, input_parsers)
 
@@ -57,26 +66,39 @@ class Clifier(object):
         arg_parser = ArgumentParser(description=description)
 
         if version:
-            arg_parser.add_argument('--version', action='version', version='%(prog)s ' + version)
+            arg_parser.add_argument(
+                "--version", action="version", version="%(prog)s " + version
+            )
 
         for name, parameter_info in self._parameter_infos.items():
             check_parameter_info(parameter_info)
             arg_name = "--{}".format(name)
             if parameter_info.type not in input_parsers.keys():
                 raise InvalidArgument(
-                    "Parameter {0} has an unknown type: {1}".format(parameter_info.name, parameter_info.type)
+                    "Parameter {0} has an unknown type: {1}".format(
+                        parameter_info.name, parameter_info.type
+                    )
                 )
             type_parser = input_parsers[parameter_info.type]()
             type_parse_func = _make_argument_parser(type_parser)
 
             if parameter_info.required:
-                help_ = "Required {0}, type {1}".format(parameter_info.description, type_parser.value_format)
-                arg_parser.add_argument(arg_name, required=True, help=help_, type=type_parse_func)
-            else:
-                help_ = "{0}, type {1}, (default: %(default)s)" \
-                    .format(parameter_info.description, type_parser.value_format)
+                help_ = "Required {0}, type {1}".format(
+                    parameter_info.description, type_parser.value_format
+                )
                 arg_parser.add_argument(
-                    arg_name, default=parameter_info.default, required=False, help=help_, type=type_parse_func
+                    arg_name, required=True, help=help_, type=type_parse_func
+                )
+            else:
+                help_ = "{0}, type {1}, (default: %(default)s)".format(
+                    parameter_info.description, type_parser.value_format
+                )
+                arg_parser.add_argument(
+                    arg_name,
+                    default=parameter_info.default,
+                    required=False,
+                    help=help_,
+                    type=type_parse_func,
                 )
 
         return arg_parser

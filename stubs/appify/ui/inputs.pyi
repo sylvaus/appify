@@ -1,6 +1,7 @@
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 from typing import Any, Optional, Union
 
+from appify.common.abc import ABC
 from appify.exceptions import AppifyException
 
 try:
@@ -16,8 +17,7 @@ class InvalidInput(AppifyException):
         ...
 
 
-class InputWidget(tk.Frame):
-    __metaclass__ = ABCMeta
+class InputWidget(tk.Frame, ABC):
 
     @abstractmethod
     def was_set(self) -> bool:

@@ -69,7 +69,7 @@ def get_parameter_infos(func, doc_parser=None):
         if name not in doc_param_infos:
             continue
         try:
-            func_param_infos[name].update(doc_param_infos[name])
+            info.update(doc_param_infos[name])
         except IncompatibleParameter as e:
             raise IncompatibleParameter(
                 "Information on parameter {} does not match between "

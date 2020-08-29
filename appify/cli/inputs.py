@@ -1,5 +1,6 @@
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 
+from appify.common.abc import ABC
 from appify.exceptions import AppifyException
 
 
@@ -7,13 +8,12 @@ class InvalidArgumentFormat(AppifyException):
     pass
 
 
-class InputParser(object):
-    __metaclass__ = ABCMeta
-
+class InputParser(ABC):
     @abstractmethod
     def parse(self, string):
         """
         Parse the string into the specialized type
+
         :param string: str to parse
         :type string: str
         :return: Value if successful otherwise raise ArgumentTypeError
@@ -48,7 +48,9 @@ class IntInputParser(InputParser):
         try:
             val = int(string, int_format)
         except ValueError:
-            raise InvalidArgumentFormat("Could not convert \"{0}\" into int".format(string))
+            raise InvalidArgumentFormat(
+                'Could not convert "{0}" into int'.format(string)
+            )
 
         return val
 
@@ -66,7 +68,7 @@ class FloatInputParser(InputParser):
         else:
             return val
 
-        raise InvalidArgumentFormat("Could not convert \"{0}\" into float".format(string))
+        raise InvalidArgumentFormat('Could not convert "{0}" into float'.format(string))
 
     @property
     def value_format(self):
@@ -84,7 +86,7 @@ class BoolInputParser(InputParser):
             return True
         if string.lower() == "true":
             return True
-        raise InvalidArgumentFormat("Could not convert \"{0}\" into bool".format(string))
+        raise InvalidArgumentFormat('Could not convert "{0}" into bool'.format(string))
 
     @property
     def value_format(self):

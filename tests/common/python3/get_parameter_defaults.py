@@ -1,7 +1,12 @@
+import sys
+
+import pytest
+
 from appify.common.get_parameters import get_parameter_default_annotations
 from appify.common.parameter_info import NoDefault
 
 
+@pytest.mark.skipif(sys.version_info < (3,), reason="requires python3")
 def test_get_parameters_single_param_str_annotation():
     def func(a: str):
         pass
@@ -10,9 +15,10 @@ def test_get_parameters_single_param_str_annotation():
     assert list(parameter_infos.keys()) == ["a"]
     assert parameter_infos["a"].name == "a"
     assert parameter_infos["a"].type == "str"
-    assert parameter_infos["a"].required == True
+    assert parameter_infos["a"].required
 
 
+@pytest.mark.skipif(sys.version_info < (3,), reason="requires python3")
 def test_get_parameters_single_param_str_annotation_str_default():
     def func(a: str = "ab"):
         pass
@@ -22,9 +28,10 @@ def test_get_parameters_single_param_str_annotation_str_default():
     assert parameter_infos["a"].name == "a"
     assert parameter_infos["a"].type == "str"
     assert parameter_infos["a"].default == "ab"
-    assert parameter_infos["a"].required == False
+    assert not parameter_infos["a"].required
 
 
+@pytest.mark.skipif(sys.version_info < (3,), reason="requires python3")
 def test_get_parameters_multiple_params_defaults_annotations():
     def func(a, a_b=12.5, T_test_param: str = "abcd", underscore_: int = 123):
         pass
@@ -38,12 +45,12 @@ def test_get_parameters_multiple_params_defaults_annotations():
     assert parameter_infos["a_b"].name == "a_b"
     assert parameter_infos["a_b"].default == 12.5
     assert parameter_infos["a_b"].type is None
-    assert parameter_infos["a_b"].required == False
+    assert not parameter_infos["a_b"].required
     assert parameter_infos["T_test_param"].name == "T_test_param"
     assert parameter_infos["T_test_param"].default == "abcd"
     assert parameter_infos["T_test_param"].type == "str"
-    assert parameter_infos["T_test_param"].required == False
+    assert not parameter_infos["T_test_param"].required
     assert parameter_infos["underscore_"].name == "underscore_"
     assert parameter_infos["underscore_"].default == 123
     assert parameter_infos["underscore_"].type == "int"
-    assert parameter_infos["underscore_"].required == False
+    assert not parameter_infos["underscore_"].required

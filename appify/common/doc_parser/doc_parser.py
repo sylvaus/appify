@@ -2,12 +2,12 @@
 This module provides the abstract class for the docstring parser to
 get the type and description of the parameters
 """
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
+
+from appify.common.abc import ABC
 
 
-class DocParser(object):
-    __metaclass__ = ABCMeta
-
+class DocParser(ABC):
     @abstractmethod
     def parse(self, docstring):
         """

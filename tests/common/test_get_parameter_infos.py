@@ -20,7 +20,9 @@ def test_get_parameter_info_should_return_empty_dict_for_a_func_with_no_paramete
         pass
 
     result = get_parameter_infos(func)
-    assert result == {}, "Function with no parameter should no get any parameter info even with docstring"
+    assert (
+        result == {}
+    ), "Function with no parameter should no get any parameter info even with docstring"
 
 
 def test_get_parameter_info_should_return_combine_information_from_signature_and_docstring():

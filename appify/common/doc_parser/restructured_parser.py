@@ -15,7 +15,10 @@ class RestructuredParser(DocParser):
     TYPE_INFO = "info_type"
     TYPE_INFO_DESCRIPTION = "param"
     TYPE_INFO_TYPE = "type"
-    REGEX = r"\s*:\s*(?P<info_type>[a-zA-Z0-9-_]+)+\s*(?P<name>[a-zA-Z0-9-_]+)\s*:\s*(?P<description>.*)"
+    REGEX = (
+        r"\s*:\s*(?P<info_type>[a-zA-Z0-9-_]+)+\s*"
+        r"(?P<name>[a-zA-Z0-9-_]+)\s*:\s*(?P<description>.*)"
+    )
 
     def __init__(self):
         self._regex = re.compile(self.REGEX)
@@ -70,7 +73,7 @@ class RestructuredParser(DocParser):
 
         index += 1
         while (index < length) and (count_leading_space(lines[index]) > initial_indent):
-            text += (" " + lines[index].strip())
+            text += " " + lines[index].strip()
             index += 1
 
         return index, text

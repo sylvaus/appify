@@ -1,5 +1,6 @@
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 
+from appify.common.abc import ABC
 from appify.exceptions import AppifyException
 from appify.ui.tooltip import ToolTip
 
@@ -17,9 +18,7 @@ class InvalidArgumentFormat(AppifyException):
         self.help = help_ if help_ else message
 
 
-class InputWidget(tk.Frame):
-    __metaclass__ = ABCMeta
-
+class InputWidget(tk.Frame, ABC):
     @abstractmethod
     def was_set(self):
         """
@@ -83,7 +82,15 @@ StrInputWidget = BaseInputWidget
 
 
 class FilePathInputWidget(InputWidget):
-    def __init__(self, master, name, initial_value="", description="", dialog_options=None, **kwargs):
+    def __init__(
+        self,
+        master,
+        name,
+        initial_value="",
+        description="",
+        dialog_options=None,
+        **kwargs
+    ):
         super(FilePathInputWidget, self).__init__(master, **kwargs)
         self._name = name
         self._dialog_options = dialog_options if dialog_options else {}
@@ -143,7 +150,9 @@ class IntInputWidget(BaseInputWidget):
             value = int(value_str)
         except (TypeError, ValueError):
             raise InvalidArgumentFormat(
-                "Failed to convert value \"{0}\" to int".format(value_str, self._name)
+                'Failed to convert value "{0}" to int for parameter "{1}"'.format(
+                    value_str, self._name
+                )
             )
 
         return value
@@ -161,8 +170,9 @@ class FloatInputWidget(BaseInputWidget):
             value = float(value_str)
         except (TypeError, ValueError):
             raise InvalidArgumentFormat(
-                "Failed to convert value \"{0}\" to float"
-                    .format(value_str, self._name)
+                'Failed to convert value "{0}" to float for parameter "{1}"'.format(
+                    value_str, self._name
+                )
             )
 
         return value

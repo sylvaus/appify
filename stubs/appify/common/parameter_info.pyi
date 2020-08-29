@@ -27,3 +27,15 @@ class ParameterInfo(object):
 
     def update(self, other):
         ...
+
+    @staticmethod
+    def _has_compatible_type(type_: Optional[ParameterType], other_type: Optional[ParameterType]) -> bool:
+        ...
+
+    @staticmethod
+    def _has_compatible_default(default: Any, other_default: Any) -> bool:
+        ...
+
+    @staticmethod
+    def _has_compatible_description(description: Optional[str], other_description: Optional[str]) -> bool:
+        ...

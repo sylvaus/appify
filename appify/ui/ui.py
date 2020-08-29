@@ -12,7 +12,13 @@ from appify.common.exceptions import InvalidArgument
 from appify.common.get_parameters import get_parameter_infos
 from appify.common.parameter_info import NoDefault
 from appify.common.doc_parser.restructured_parser import RestructuredParser
-from appify.ui.inputs import StrInputWidget, BoolInputWidget, FloatInputWidget, IntInputWidget, InvalidInput
+from appify.ui.inputs import (
+    StrInputWidget,
+    BoolInputWidget,
+    FloatInputWidget,
+    IntInputWidget,
+    InvalidInput,
+)
 
 DEFAULT_DOC_PARSER = RestructuredParser()
 
@@ -50,10 +56,15 @@ class AllInputsFrame(tk.Frame):
             if parameter_info.default != NoDefault:
                 self._default_map[name] = parameter_info.default
                 self._name_widget_map[name] = widget.create(
-                    master, name, initial_value=parameter_info.default, description=parameter_info.description
+                    master,
+                    name,
+                    initial_value=parameter_info.default,
+                    description=parameter_info.description,
                 )
             else:
-                self._name_widget_map[name] = widget.create(master, name, description=parameter_info.description)
+                self._name_widget_map[name] = widget.create(
+                    master, name, description=parameter_info.description
+                )
 
             self._name_widget_map[name].pack()
 
@@ -97,11 +108,18 @@ class AllInputsFrame(tk.Frame):
 
 class Guifier(object):
     def __init__(
-            self, func, description=None, version=None
-            , doc_parser=None, type_widget_map=None, name_widget_map=None
-            , exit_on_success=False
-            , success_message=None, success_callback=None
-            , error_message=None, error_callback=None
+        self,
+        func,
+        description=None,
+        version=None,
+        doc_parser=None,
+        type_widget_map=None,
+        name_widget_map=None,
+        exit_on_success=False,
+        success_message=None,
+        success_callback=None,
+        error_message=None,
+        error_callback=None,
     ):
         self._func = func
         self._description = description
@@ -128,7 +146,9 @@ class Guifier(object):
         self._error_message = error_message
         self._error_callback = error_callback
         self._parameter_infos = get_parameter_infos(func, doc_parser)
-        self._name_widget_map = self._get_name_input_widgets(type_widget_map, name_widget_map)
+        self._name_widget_map = self._get_name_input_widgets(
+            type_widget_map, name_widget_map
+        )
 
     def get_all_input_frame(self, master, **kwargs):
         return self._create_all_input_frame(master, **kwargs)
@@ -138,7 +158,9 @@ class Guifier(object):
         input_frame = self.get_all_input_frame(root)
         input_frame.pack()
 
-        button = tk.Button(root, text="run", command=lambda: self._run_function(input_frame, root))
+        button = tk.Button(
+            root, text="run", command=lambda: self._run_function(input_frame, root)
+        )
         button.pack()
 
         tk.mainloop()
@@ -171,28 +193,36 @@ class Guifier(object):
             check_parameter_info(parameter_info)
             if parameter_info.type not in type_widget_map:
                 raise InvalidArgument(
-                    "Parameter {0} has a type (\"{1}\") which is not handled."
+                    'Parameter {0} has a type ("{1}") which is not handled.'
                     "Either add a specific Input widget for the parameter "
-                    "to name_widget_map or an Input Widget for the type in type_widget_map"
-                        .format(parameter_info.name, parameter_info.type)
+                    "to name_widget_map or an Input Widget for the type in type_widget_map".format(
+                        parameter_info.name, parameter_info.type
+                    )
                 )
 
-            name_input_widgets[parameter_info.name] = type_widget_map[parameter_info.type]
+            name_input_widgets[parameter_info.name] = type_widget_map[
+                parameter_info.type
+            ]
 
         return name_input_widgets
 
     def _create_all_input_frame(self, master: tk.Widget, **kwargs):
-        return AllInputsFrame(master, self._parameter_infos, self._name_widget_map, **kwargs)
+        return AllInputsFrame(
+            master, self._parameter_infos, self._name_widget_map, **kwargs
+        )
 
     @staticmethod
     def _display_error_missing_inputs(inputs):
         missing = "  - " + "\n  - ".join(inputs.missings)
-        invalid = "  - " + "\n  - ".join("{0}: {1}".format(name, error) for name, error in inputs.errors.items())
+        invalid = "  - " + "\n  - ".join(
+            "{0}: {1}".format(name, error) for name, error in inputs.errors.items()
+        )
 
         messagebox.showinfo(
-            "Invalid Inputs"
-            , "Some values were missing or invalid."
-              "\nMissing:\n{0}\nInvalid:\n{1}".format(missing, invalid))
+            "Invalid Inputs",
+            "Some values were missing or invalid."
+            "\nMissing:\n{0}\nInvalid:\n{1}".format(missing, invalid),
+        )
 
     def _display_error_exception(self, e):
         messagebox.showinfo("Error", "{0}. Error {1}:".format(self._error_message, e))

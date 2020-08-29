@@ -21,9 +21,13 @@ class ToolTip(object):
         self._tip_window.wm_overrideredirect(1)
         self._tip_window.wm_geometry("+%d+%d" % (x, y))
         label = tk.Label(
-            self._tip_window, text=self._text, justify=tk.LEFT,
-            background="#ffffe0", relief=tk.SOLID, borderwidth=1,
-            font=("tahoma", "8", "normal")
+            self._tip_window,
+            text=self._text,
+            justify=tk.LEFT,
+            background="#ffffe0",
+            relief=tk.SOLID,
+            borderwidth=1,
+            font=("tahoma", "8", "normal"),
         )
         label.pack(ipadx=1)
 
@@ -35,7 +39,7 @@ class ToolTip(object):
     @staticmethod
     def add_tool_tip(widget, description):
         tool_tip = ToolTip(widget, description)
-        widget.bind('<Enter>', tool_tip.show_tip)
-        widget.bind('<Leave>', tool_tip.hide_tip)
+        widget.bind("<Enter>", tool_tip.show_tip)
+        widget.bind("<Leave>", tool_tip.hide_tip)
 
         return tool_tip

@@ -1,5 +1,3 @@
-
-
 from appify.common.doc_parser.restructured_parser import RestructuredParser
 
 

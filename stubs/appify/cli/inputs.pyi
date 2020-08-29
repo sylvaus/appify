@@ -1,6 +1,7 @@
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 from typing import Any
 
+from appify.common.abc import ABC
 from appify.exceptions import AppifyException
 
 
@@ -8,8 +9,7 @@ class InvalidArgumentFormat(AppifyException):
     pass
 
 
-class InputParser(object):
-    __metaclass__ = ABCMeta
+class InputParser(ABC):
 
     @abstractmethod
     def parse(self, string) -> Any:
