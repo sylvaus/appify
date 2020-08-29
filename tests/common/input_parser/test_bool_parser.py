@@ -1,16 +1,16 @@
 import pytest
 
-from appify.common.input_parser.input_parser import IntInputParser, BoolInputParser, InvalidArgumentFormat
+from appify.cli.inputs import IntInputParser, BoolInputParser, InvalidArgumentFormat
 
 
-def test_parse_bool():
+def test_parse_valid_bool():
     parser = BoolInputParser()
-    assert parser.parse("true") == True
-    assert parser.parse(" 1") == True
-    assert parser.parse(" True ") == True
-    assert parser.parse(" 0 ") == False
-    assert parser.parse("false ") == False
-    assert parser.parse(" False ") == False
+    assert parser.parse("true")
+    assert parser.parse(" 1")
+    assert parser.parse(" True ")
+    assert not parser.parse(" 0 ")
+    assert not parser.parse("false ")
+    assert not parser.parse(" False ")
 
 
 def test_parse_invalid_string():

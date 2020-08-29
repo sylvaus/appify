@@ -24,7 +24,7 @@ def test_get_parameters_single_param_no_default():
     parameter_infos = get_parameter_default_annotations(func)
     assert list(parameter_infos.keys()) == ["a"]
     assert parameter_infos["a"].name == "a"
-    assert parameter_infos["a"].required == True
+    assert parameter_infos["a"].required
 
 
 def test_get_parameters_single_param_str_default():
@@ -35,7 +35,7 @@ def test_get_parameters_single_param_str_default():
     assert list(parameter_infos.keys()) == ["a"]
     assert parameter_infos["a"].name == "a"
     assert parameter_infos["a"].default == "ab"
-    assert parameter_infos["a"].required == False
+    assert not parameter_infos["a"].required
 
 
 def test_get_parameters_multiple_params_no_default():

@@ -23,8 +23,7 @@ class RestructuredParser(DocParser):
     def parse(self, docstring):
         """
         Parse the docstring
-        :param docstring:
-            docstring to parse
+        :param docstring: docstring to parse
         :return: Dictionary of ParameterInfo with the name as key
         """
         lines = [line for line in docstring.split("\n") if line.strip() != ""]
@@ -60,12 +59,10 @@ class RestructuredParser(DocParser):
     def _get_info_text(lines, index, length):
         """
         Collect all the lines related to the one defined by the index given
-        :param lines:
-            docstring lines
-        :param index:
-            index of the beginning of the parameter info
-        :param length:
-            length of the docstring
+
+        :param lines: docstring lines
+        :param index: index of the beginning of the parameter info
+        :param length: length of the docstring
         :return: index of the next unprocessed line, text associated
         """
         initial_indent = count_leading_space(lines[index])
@@ -73,7 +70,7 @@ class RestructuredParser(DocParser):
 
         index += 1
         while (index < length) and (count_leading_space(lines[index]) > initial_indent):
-            text += (" " + lines[index].trim())
+            text += (" " + lines[index].strip())
             index += 1
 
         return index, text

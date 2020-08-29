@@ -1,7 +1,3 @@
-"""
-
-"""
-
 from abc import ABCMeta, abstractmethod
 
 from appify.exceptions import AppifyException

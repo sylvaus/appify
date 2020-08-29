@@ -1,6 +1,6 @@
 import pytest
 
-from appify.common.input_parser.input_parser import IntInputParser, InvalidArgumentFormat
+from appify.cli.inputs import IntInputParser, InvalidArgumentFormat
 
 
 def test_parse_decimal():

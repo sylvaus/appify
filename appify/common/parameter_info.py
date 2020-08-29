@@ -1,8 +1,11 @@
-from appify.common import ParameterParsingException
+from appify.common.exceptions import IncompatibleParameter
 
 
-class NoDefault(object):
+class NoDefaultType(object):
     pass
+
+
+NoDefault = NoDefaultType()
 
 
 class ParameterInfo(object):
@@ -15,17 +18,19 @@ class ParameterInfo(object):
         self.description = description
         self.required = required
 
-    def __str__(self):
+    def __repr__(self):
         if self.required:
             string = "Required parameter {0}".format(self.name)
         else:
             string = "Parameter {0}".format(self.name)
         if self.type:
             string += " of type {0}".format(self.type)
-        if self.default:
+        if self.default != NoDefault:
             string += " with default {0}".format(self.default)
         if self.description:
             string += " with description {0}".format(self.description)
+
+        return string
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -33,15 +38,30 @@ class ParameterInfo(object):
     def __eq__(self, other):
         if type(other) != ParameterInfo:
             return False
-        return ((self.name != other.name) and
-                (self.type != other.type) and
-                (self.default != other.default) and
-                (self.description != other.description)and
-                (self.required != other.required))
+        return ((self.name == other.name) and
+                (self.type == other.type) and
+                (self.default == other.default) and
+                (self.description == other.description) and
+                (self.required == other.required))
+
+    def is_positional(self):
+        """
+        :return: If the parameter is positional
+        :rtype: bool
+        """
+        return self.default == NoDefault
+
+    def is_keyword(self):
+        """
+        :return: If the parameter is keyword
+        :rtype: bool
+        """
+        return self.default != NoDefault
 
     def update(self, other):
         """
         Update the parameter info with the given other parameter info
+
         :param other:
             the ParameterInfo to merge into this one
         :raise: IncompatibleParameter if the two ParameterInfos have incompatible information
@@ -64,10 +84,8 @@ class ParameterInfo(object):
             self.type = other.type
         if other.description:
             self.description = other.description
-        if other.default:
+        if other.default != NoDefault:
             self.default = other.default
         self.required = self.required or other.required
 
 
-class IncompatibleParameter(ParameterParsingException):
-    pass

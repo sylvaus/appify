@@ -1,6 +1,6 @@
 import pytest
 
-from appify.common.input_parser.input_parser import FloatInputParser, IntInputParser, InvalidArgumentFormat
+from appify.cli.inputs import FloatInputParser, IntInputParser, InvalidArgumentFormat
 
 
 def test_parse_float():

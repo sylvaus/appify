@@ -14,7 +14,6 @@ class DocParser(object):
         Parse the given docstring and returns a dictionary of ParameterInfos
         with the name as a key with the information parsed
         :param docstring: given docstring
-        :return: dictionary of ParameterInfos
-        with the name as a key with the information parsed
+        :return: dictionary of ParameterInfos with the name as a key with the information parsed
         """
         pass
