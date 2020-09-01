@@ -5,7 +5,7 @@ from appify.common.doc_parser.doc_parser import DocParser
 from appify.common.parameter_info import ParameterInfo, ParameterName
 
 
-def count_leading_space(line) -> int:
+def count_leading_space(line: str) -> int:
     return len(line) - len(line.lstrip())
 
 

@@ -7,6 +7,9 @@ class NoDefaultType(object):
 
 NoDefault = NoDefaultType()
 
+ParameterName = str
+ParameterType = str
+
 
 class ParameterInfo(object):
     __slots__ = ["name", "type", "default", "description", "required"]
@@ -71,28 +74,14 @@ class ParameterInfo(object):
         :return: None
         """
         if self.name != other.name:
-            raise IncompatibleParameter(
-                "Cannot merge two parameters with different names: {0} and {1}".format(
-                    self.name, other.name
-                )
-            )
+            self._raise_incompatible_parameters("name", self.name, other.name)
         if not self._has_compatible_type(self.type, other.type):
-            raise IncompatibleParameter(
-                "Parameter {0} has two different type defined: {1} and {2}".format(
-                    self.name, self.type, other.type
-                )
-            )
+            self._raise_incompatible_parameters("type", self.type, other.type)
         if not self._has_compatible_default(self.default, other.default):
-            raise IncompatibleParameter(
-                "Parameter {0} has two different default value defined: {1} and {2}".format(
-                    self.name, self.default, other.default
-                )
-            )
+            self._raise_incompatible_parameters("default", self.default, other.default)
         if not self._has_compatible_description(self.description, other.description):
-            raise IncompatibleParameter(
-                "Parameter {0} has two different description defined: {1} and {2}".format(
-                    self.name, self.description, other.description
-                )
+            self._raise_incompatible_parameters(
+                "description", self.default, other.default
             )
 
         if other.type:
@@ -102,6 +91,15 @@ class ParameterInfo(object):
         if other.default != NoDefault:
             self.default = other.default
         self.required = self.required or other.required
+
+    def _raise_incompatible_parameters(
+        self, attribute_name, attribute, other_attribute
+    ):
+        raise IncompatibleParameter(
+            "Parameter {0} has two different {1} defined: {2} and {3}".format(
+                self.name, attribute_name, attribute, other_attribute
+            )
+        )
 
     @staticmethod
     def _has_compatible_type(type_, other_type):

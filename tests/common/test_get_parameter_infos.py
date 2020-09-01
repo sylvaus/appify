@@ -1,5 +1,10 @@
+# noinspection PyUnresolvedReferences
 from appify.common.get_parameters import get_parameter_infos
 from appify.common.parameter_info import ParameterInfo
+from ..utils import PYTHON3
+
+if PYTHON3:
+    from .python3.get_paramters_infos import *  # noqa: F403 F401
 
 
 def test_get_parameter_info_should_return_empty_dict_for_a_func_with_no_parameters():

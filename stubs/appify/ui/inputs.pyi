@@ -48,7 +48,7 @@ class BaseInputWidget(InputWidget):
     def set(self, value: str):
         ...
 
-    def get(self) -> str:
+    def get(self) -> Any:
         ...
 
     def _changed(self, *args) -> None:
