@@ -1,10 +1,11 @@
 from abc import abstractmethod
+from argparse import ArgumentTypeError
 
 from appify.common.six_abc import ABC
 from appify.exceptions import AppifyException
 
 
-class InvalidArgumentFormat(AppifyException):
+class InvalidArgumentFormat(AppifyException, ArgumentTypeError):
     pass
 
 

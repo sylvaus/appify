@@ -1,7 +1,7 @@
 from __future__ import print_function
 
 import copy
-from argparse import ArgumentParser, ArgumentTypeError
+from argparse import ArgumentParser
 
 from appify.cli.inputs import (
     IntInputParser,
@@ -11,7 +11,6 @@ from appify.cli.inputs import (
 )
 from appify.common.checks import check_parameter_info
 from appify.common.doc_parser.restructured_parser import RestructuredParser
-from appify.common.exceptions import InvalidArgument
 from appify.common.get_parameters import get_parameter_infos
 
 DEFAULT_DOC_PARSER = RestructuredParser()
@@ -42,13 +41,15 @@ class Clifier(object):
     def arg_parser(self):
         return self._arg_parser
 
-    def run(self):
+    def run(self, args=None):
         """
         Run the given function as a command line
+
+        :param args: List of strings to parse. The default is taken from sys.argv.
         :return: True if the cli could be created otherwise False
         """
 
-        arguments = self._arg_parser.parse_args()
+        arguments = self._arg_parser.parse_args(args)
         params = [getattr(arguments, name) for name in self._parameter_infos]
 
         return self._func(*params)
@@ -63,7 +64,7 @@ class Clifier(object):
         :param input_parsers: Input Parsers to use
         :return: ArgumentParser
         """
-        arg_parser = ArgumentParser(description=description)
+        arg_parser = ArgumentParser(description=description, prog=self._func.__name__)
 
         if version:
             arg_parser.add_argument(
@@ -71,52 +72,26 @@ class Clifier(object):
             )
 
         for name, parameter_info in self._parameter_infos.items():
-            check_parameter_info(parameter_info)
-            arg_name = "--{}".format(name)
-            if parameter_info.type not in input_parsers.keys():
-                raise InvalidArgument(
-                    "Parameter {0} has an unknown type: {1}".format(
-                        parameter_info.name, parameter_info.type
-                    )
-                )
-            type_parser = input_parsers[parameter_info.type]()
-            type_parse_func = _make_argument_parser(type_parser)
+            check_parameter_info(parameter_info, input_parsers)
 
+            type_parser = input_parsers[parameter_info.type]()
+            type_parse_func = type_parser.parse
+
+            kwargs = {}
             if parameter_info.required:
+                args_name = name
                 help_ = "Required {0}, type {1}".format(
                     parameter_info.description, type_parser.value_format
                 )
-                arg_parser.add_argument(
-                    arg_name, required=True, help=help_, type=type_parse_func
-                )
             else:
+                args_name = "--{}".format(name)
                 help_ = "{0}, type {1}, (default: %(default)s)".format(
                     parameter_info.description, type_parser.value_format
                 )
-                arg_parser.add_argument(
-                    arg_name,
-                    default=parameter_info.default,
-                    required=False,
-                    help=help_,
-                    type=type_parse_func,
-                )
+                kwargs = {"default": parameter_info.default, "required": False}
+
+            arg_parser.add_argument(
+                args_name, help=help_, type=type_parse_func, **kwargs
+            )
 
         return arg_parser
-
-
-def _make_argument_parser(parser):
-    """
-    Make an argument parser for the ArgumentParser from an InputParser
-    :param parser: Parser to decorate for the ArgumentParser
-    :type parser: InputParser
-    :return: Function that will raise ArgumentTypeError if the str argument cannot be parsed
-    """
-
-    def parse(text):
-        success, result = parser.parse(text)
-        if not success:
-            raise ArgumentTypeError(result)
-
-        return result
-
-    return parse

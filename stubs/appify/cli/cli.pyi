@@ -13,7 +13,7 @@ DEFAULT_INPUT_PARSERS: Dict[ParameterType, Type[IntInputParser]] = ...
 
 
 class Clifier(object):
-    def __init__(self, func, description=None, version=None, doc_parser=None, input_parsers=None):
+    def __init__(self, func: Callable, description=None, version=None, doc_parser=None, input_parsers=None):
         self._func: Callable = ...
         self._parameter_infos: Dict[ParameterType, ParameterInfo] = ...
         self._arg_parser: ArgumentParser = ...
@@ -22,16 +22,8 @@ class Clifier(object):
     def arg_parser(self) -> ArgumentParser:
         ...
 
-    def run(self) -> Any:
-        """
-        Run the given function as a command line
-        :return: True if the cli could be created otherwise False
-        """
-
-        arguments = self._arg_parser.parse_args()
-        params = [getattr(arguments, name) for name in self._parameter_infos]
-
-        return self._func(*params)
+    def run(self, args=None) -> Any:
+        ...
 
     def _create_arg_parser(
             self, description: str, version: str, input_parsers: Dict[ParameterType, Type[IntInputParser]]

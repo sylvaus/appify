@@ -7,11 +7,11 @@ Appify is a python package aimed at making simple cli and UI by simply providing
 
 * Common part is implemented and tested 
 * Clifier is implemented but not tested 
-* Uilifier is not implemented
+* Guilifier is implemented but not tested 
 
 ## Example
 ```python
-from appify.cli.cli import Clifier
+from appify.cli import Clifier
 
 def print_main(name):
     """
